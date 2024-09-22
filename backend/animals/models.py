@@ -33,6 +33,7 @@ class Animal(models.Model):
     sex = models.CharField(blank=True)
     special_needs = models.CharField(blank=True)
     description = models.TextField(blank=True)
+    picture = models.ImageField(upload_to='images/')
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.CASCADE)

@@ -31,4 +31,4 @@ class AnimalSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
         
         model = Animal
-        fields = ['id', 'name', 'age', 'sex', 'special_needs', 'description', 'city', 'shelter', 'species']
+        fields = ['id', 'name', 'age', 'sex', 'special_needs', 'description', 'picture', 'city', 'shelter', 'species']
