@@ -30,7 +30,10 @@ class Species(models.Model):
 class Animal(models.Model):
     name = models.CharField()
     age = models.CharField(blank=True)
-    sex = models.CharField(blank=True)
+    sex = models.CharField(max_length=6, choices={
+        'male': 'Patinas',
+        'female': 'Patelė'
+    })
     special_needs = models.CharField(blank=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='images/')
