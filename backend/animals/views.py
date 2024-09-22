@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
-from . models import *
-from rest_framework.response import Response
-# from . serializers import *
+from rest_framework import generics
+from .models import City, Shelter, Species, Animal
+from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer
 
-def index():
-    pass
+
+class CityListCreate(generics.ListCreateAPIView):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
