@@ -8,8 +8,9 @@ class City(models.Model):
 
 
 class Shelter(models.Model):
-    name = models.CharField()
+    owner = models.ForeignKey('auth.User', related_name='owner', on_delete=models.CASCADE, default = 1)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    name = models.CharField()
     full_address = models.CharField()
     email = models.EmailField()
     phone = models.CharField()

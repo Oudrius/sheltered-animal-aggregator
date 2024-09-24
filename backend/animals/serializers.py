@@ -15,7 +15,7 @@ class ShelterSerializer(serializers.ModelSerializer):
         id = serializers.ReadOnlyField()
         
         model = Shelter
-        fields = ['id', 'name', 'city', 'full_address', 'email', 'phone', 'website']
+        fields = ['id', 'owner', 'name', 'city', 'full_address', 'email', 'phone', 'website']
 
 
 class SpeciesSerializer(serializers.ModelSerializer):
