@@ -21,8 +21,6 @@ class Shelter(models.Model):
 
 class Species(models.Model):
     name = models.CharField()
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
@@ -38,10 +36,13 @@ class Animal(models.Model):
     special_needs = models.CharField(blank=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='images/')
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
     shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
+    
+    @property
+    def city(self):
+        return self.shelter.city.name
     

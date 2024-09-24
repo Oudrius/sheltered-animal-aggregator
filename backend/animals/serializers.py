@@ -4,7 +4,6 @@ from animals.models import City, Shelter, Species, Animal
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        id = serializers.ReadOnlyField()
         
         model = City
         fields = ['id', 'name']
@@ -12,7 +11,6 @@ class CitySerializer(serializers.ModelSerializer):
 
 class ShelterSerializer(serializers.ModelSerializer):
     class Meta:
-        id = serializers.ReadOnlyField()
         
         model = Shelter
         fields = ['id', 'owner', 'name', 'city', 'full_address', 'email', 'phone', 'website']
@@ -20,15 +18,15 @@ class ShelterSerializer(serializers.ModelSerializer):
 
 class SpeciesSerializer(serializers.ModelSerializer):
     class Meta:
-        id = serializers.ReadOnlyField()
         
         model = Species
-        fields = ['id', 'name', 'city', 'shelter']
+        fields = ['id', 'name']
 
 
 class AnimalSerializer(serializers.ModelSerializer):
+    shelter = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    
     class Meta:
-        id = serializers.ReadOnlyField()
         
         model = Animal
         fields = ['id', 'name', 'age', 'sex', 'special_needs', 'description', 'picture', 'city', 'shelter', 'species']
