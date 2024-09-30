@@ -1,41 +1,41 @@
 from django.db import models
 
 class City(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
 
 
 class Shelter(models.Model):
-    owner = models.ForeignKey('auth.User', related_name='owner', on_delete=models.CASCADE, default = 1)
+    owner = models.ForeignKey('auth.User', related_name='owner', on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    name = models.CharField()
-    full_address = models.CharField()
+    name = models.CharField(max_length=254)
+    full_address = models.CharField(max_length=254)
     email = models.EmailField()
-    phone = models.CharField()
-    website = models.URLField(blank=True)
+    phone = models.CharField(max_length=30)
+    website = models.URLField(blank=True, null=True, max_length=100)
     
     def __str__(self):
         return self.name
 
 class Species(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
     
     
 class Animal(models.Model):
-    name = models.CharField()
-    age = models.CharField(blank=True)
-    sex = models.CharField(max_length=6, choices={
-        'male': 'Patinas',
-        'female': 'Patelė'
-    })
-    special_needs = models.CharField(blank=True)
-    description = models.TextField(blank=True)
-    picture = models.ImageField(upload_to='images/')
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(blank=True, null=True)
+    sex = models.CharField(max_length=6, choices=(
+        ('male', 'Patinas'),
+        ('female', 'Patelė')
+    ))
+    special_needs = models.CharField(blank=True, null=True, max_length=254)
+    description = models.TextField(blank=True, null=True)
+    picture = models.ImageField(upload_to='images/', blank=True, null=True)
     shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
     
