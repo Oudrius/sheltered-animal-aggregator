@@ -3,11 +3,12 @@ from . import views
 
 
 urlpatterns = [
+    path("auth/invitations/", views.InvitationsListCreate.as_view(), name='invitation-view-create'),
     path("auth/csrf/", views.CsrfRetrieve.as_view(), name='csrf'),
     path("auth/login/", views.Login.as_view(), name='login'),
     path("auth/logout/", views.Logout.as_view(), name='logout'),
-    path("auth/session", views.SessionRetrieve.as_view(), name='session'),
-    path("auth/username", views.UsernameRetrieve.as_view(), name='username'),
+    path("auth/session/", views.SessionRetrieve.as_view(), name='session'),
+    path("auth/user/", views.UsernameRetrieve.as_view(), name='username'),
     path("cities/", views.CityListCreate.as_view(), name='city-view-create'),
     path("cities/<int:pk>/", views.CityRetrieveUpdateDestroy.as_view(), name='city-retrieve-update-destroy'),
     path("shelters/", views.ShelterListCreate.as_view(), name='shelter-view-create'),

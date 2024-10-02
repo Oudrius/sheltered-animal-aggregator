@@ -9,8 +9,30 @@ from rest_framework.views import APIView
 from django.middleware.csrf import get_token
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
-from .models import City, Shelter, Species, Animal
-from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer
+from .models import City, Shelter, Species, Animal, Invitation
+from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer, InvitationSerializer
+
+
+class InvitationsListCreate(generics.ListCreateAPIView):
+    queryset = Invitation.objects.all()
+    serializer_class = InvitationSerializer
+
+    def delete(self, request):
+        self.queryset.delete()
+
+        return Response(status=200)
+
+
+class Register(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request, format=None):
+        data = json.loads(request.body)
+
+        verification_code = data.get('verification_code')
+        username = data.get('username')
+        password = data.get('password')
+        email = data.get('email')
 
 
 class CsrfRetrieve(APIView):

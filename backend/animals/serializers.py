@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from animals.models import City, Shelter, Species, Animal
+from animals.models import City, Shelter, Species, Animal, Invitation
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -30,3 +30,11 @@ class AnimalSerializer(serializers.ModelSerializer):
         
         model = Animal
         fields = ['id', 'name', 'age', 'sex', 'special_needs', 'description', 'picture', 'city', 'shelter', 'species']
+
+
+class InvitationSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+
+        model = Invitation
+        fields = ['code', 'is_used', 'created_at']
