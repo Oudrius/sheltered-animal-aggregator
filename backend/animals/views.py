@@ -1,6 +1,4 @@
-import json
-
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.middleware.csrf import get_token
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import City, Shelter, Species, Animal, Invitation
 from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer, InvitationSerializer
@@ -24,15 +23,22 @@ class InvitationsListCreate(generics.ListCreateAPIView):
 
 
 class Register(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
     def post(self, request, format=None):
-        data = json.loads(request.body)
+        data = request.data
 
         verification_code = data.get('verification_code')
         username = data.get('username')
         password = data.get('password')
         email = data.get('email')
+
+        verification_object = get_object_or_404(Invitation, code=verification_code)
+        if verification_code == verification_object.code and not verification_object.is_used:
+            user = User.objects.create_user(username, email, password)
+            login(request, user)
+            verification_object.is_used = True
+            return Response({'detail': 'Registered successfully!'}, status=200 )
+        else:
+            return Response({'detail': 'Wrong or already used verification code.'}, status=400)
 
 
 class CsrfRetrieve(APIView):
@@ -49,7 +55,7 @@ class Login(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     
     def post(self, request, format=None):
-        data = json.loads(request.body)
+        data = request.data
         username = data.get('username')
         password = data.get('password')
         
