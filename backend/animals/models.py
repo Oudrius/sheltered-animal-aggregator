@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class City(models.Model):
     name = models.CharField(max_length=100)
@@ -8,7 +10,7 @@ class City(models.Model):
 
 
 class Shelter(models.Model):
-    owner = models.ForeignKey('auth.User', related_name='owner', on_delete=models.CASCADE)
+    owner = models.OneToOneField(User, related_name='owner', on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     name = models.CharField(max_length=254)
     full_address = models.CharField(max_length=254)

@@ -138,6 +138,10 @@ class AnimalListCreate(generics.ListCreateAPIView):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
 
+    def perform_create(self, serializer):
+        shelter = Shelter.objects.get(owner=self.request.user.id)
+        serializer.save(shelter=shelter)
+
 
 class AnimalRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Animal.objects.all()
