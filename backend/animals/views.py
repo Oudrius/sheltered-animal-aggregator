@@ -5,12 +5,20 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthentic
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.middleware.csrf import get_token
-from django.contrib.auth import validators, authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from .models import City, Shelter, Species, Animal, Invitation
 from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer, InvitationSerializer
 from .permissions import IsAdminOrReadOnly, IsAdminOrOwnerOrReadOnly, IsAdminOrAnimalOwnerOrReadOnly
+
+# TEMP
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 class InvitationsListCreate(generics.ListCreateAPIView):
@@ -26,6 +34,7 @@ class InvitationsListCreate(generics.ListCreateAPIView):
     #     return Response(status=status.HTTP_200_OK)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class Register(APIView):
     def post(self, request, format=None):
         data = request.data
@@ -35,17 +44,29 @@ class Register(APIView):
         password = data.get('password')
         email = data.get('email')
 
-        if username and password and email:
-            verification_object = get_object_or_404(Invitation, code=verification_code)
-            if verification_code == verification_object.code and not verification_object.is_used:
-                user = User.objects.create_user(username, email, password)
-                login(request, user)
-                verification_object.is_used = True
-                return Response({'detail': 'Registered successfully!'}, status=status.HTTP_201_CREATED )
+        try:
+            # Use EmailValidator's __call__ method
+            email_validator = EmailValidator()
+            email_validator(email)
+            validate_password(password)
+
+            if username and password and email:
+                verification_object = get_object_or_404(Invitation, code=verification_code)
+                if verification_code == verification_object.code and not verification_object.is_used:
+                    user = User.objects.create_user(username, email, password)
+                    login(request, user)
+                    verification_object.is_used = True
+                    verification_object.save()
+                    return Response({'detail': 'Registered successfully!'}, status=status.HTTP_201_CREATED )
+                else:
+                    return Response({'detail': 'Wrong or already used verification code.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'detail': 'Wrong or already used verification code.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'detail': 'Please enter all fields.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'detail': 'Please enter all fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except ValidationError as e:
+            return Response({'detail': e}, status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError as e:
+            return Response({'detail': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CsrfRetrieve(APIView):
