@@ -43,19 +43,34 @@ class InvitationSerializer(serializers.ModelSerializer):
         fields = ['code', 'is_used', 'created_at']
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class RegistrationSerializer(serializers.Serializer):
 
+    username = serializers.CharField(required=True)
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    verification_code = serializers.CharField(write_only=True, required=True)
 
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'email']
+    def validate(self, attrs):
+        verification_code_obj = Invitation.objects.get(code=attrs.get('verification_code'))
+        if not verification_code_obj or verification_code_obj.is_used == True:
+            raise serializers.ValidationError({
+                "verification_code": "No verification code provided or it's already used."
+            })
+                
         
-        def create(self, validated_data):
-            user = User.objects.create_user(**validated_data)
-            return user
+        return attrs
+
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'], 
+            email=validated_data['email'], password=validated_data['password']
+        )
+        verification_code_obj = Invitation.objects.get(code=validated_data['verification_code'])
+        verification_code_obj.is_used = True
+        verification_code_obj.save()
+        
+        return user
