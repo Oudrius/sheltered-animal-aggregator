@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
@@ -7,11 +6,6 @@ from rest_framework.views import APIView
 from django.middleware.csrf import get_token
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
-from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.validators import UnicodeUsernameValidator
 from .models import City, Shelter, Species, Animal, Invitation
 from .serializers import CitySerializer, ShelterSerializer, SpeciesSerializer, AnimalSerializer, InvitationSerializer, RegistrationSerializer
 from .permissions import IsAdminOrReadOnly, IsAdminOrOwnerOrReadOnly, IsAdminOrAnimalOwnerOrReadOnly
@@ -27,16 +21,12 @@ class InvitationsListCreate(generics.ListCreateAPIView):
 
     queryset = Invitation.objects.all()
     serializer_class = InvitationSerializer
-
-    # def delete(self, request):
-    #     self.queryset.delete()
-
-    #     return Response(status=status.HTTP_200_OK)
     
 
 class Register(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
+    
 
 class CsrfRetrieve(APIView):
     authentication_classes = [SessionAuthentication]

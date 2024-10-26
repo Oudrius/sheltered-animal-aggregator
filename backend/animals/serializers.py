@@ -60,9 +60,7 @@ class RegistrationSerializer(serializers.Serializer):
                 "verification_code": "No verification code provided or it's already used."
             })
                 
-        
         return attrs
-
 
     def create(self, validated_data):
         user = User.objects.create_user(
