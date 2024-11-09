@@ -3,6 +3,7 @@ import API_ROUTES from "../config/api";
 import { useNavigate } from "react-router-dom";
 import AddAnimalForm from "./AddAnimalForm";
 import { Box, Center, Text } from "@chakra-ui/react";
+import Logout from "./Logout";
 
 interface UserResponse {
   username: string;
@@ -13,6 +14,31 @@ function Admin() {
   const [user, setUser] = useState<string>();
   const [showAddForm, setShowAddForm] = useState(true);
   const navigate = useNavigate();
+  const [xcsrf, setXcsrf] = useState<string>();
+
+  useEffect(() => {
+
+    const setCookies = async () => {
+
+      const url = API_ROUTES.Csrf;
+    
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+    
+      const json = await response.json();
+
+      const xcsrftoken = response.headers.get('X-CSRFToken');
+      if (xcsrftoken) {
+        setXcsrf(xcsrftoken);
+      }
+
+    }
+    setCookies();
+  }, [])
 
   useEffect(() => {
 
@@ -20,7 +46,6 @@ function Admin() {
       try {
         const url = API_ROUTES.User;
         const response = await fetch(url, {
-          // headers: {'X-CSRFToken': cookies.get("csrftoken")},
           credentials: 'include',
         });
         const json: UserResponse = await response.json();
@@ -46,6 +71,7 @@ function Admin() {
       {user && showAddForm &&
       <>
       <h1>Logged in as: {user}</h1>
+        <Logout xcsrf={xcsrf? xcsrf: ''}/>
         <AddAnimalForm />
       </>
       }

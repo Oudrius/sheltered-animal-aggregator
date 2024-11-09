@@ -1,6 +1,7 @@
 interface APIRoutes {
     Register: string,
     Login: string,
+    Logout: string,
     Session: string,
     User: string,
     Animals: string
@@ -15,6 +16,7 @@ const ANIMALS_API_PATH = process.env.REACT_APP_API_PATH
 const API_ROUTES: APIRoutes = {
     Register: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/register/`,
     Login: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/login/`,
+    Logout: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/logout/`,
     Session: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/session/`,
     Csrf: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/csrf/`,
     User: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/user/`,
