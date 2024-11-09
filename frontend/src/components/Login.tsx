@@ -1,4 +1,5 @@
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom';
 import API_ROUTES from "../config/api";
 import {
   Center,
@@ -10,6 +11,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react'
 import './styles/form.css'
+import { useEffect, useState } from 'react';
 
 interface LoginDetails {
   username: string;
@@ -24,19 +26,46 @@ function Login() {
     formState: { errors }
   } = useForm<LoginDetails>();
 
+  useEffect(() => {
+
+    const setCookies = async () => {
+
+      const url = API_ROUTES.Csrf;
+    
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+    
+      const json = await response.json();
+      console.log(json);
+
+      const xcsrftoken = response.headers.get('X-CSRFToken');
+      if (xcsrftoken) {
+        console.log(xcsrftoken);
+        setXcsrf(xcsrftoken);
+      }
+
+    }
+    setCookies();
+  }, [])
+
+  const [xcsrf, setXcsrf] = useState<string>();
+  const navigate = useNavigate();
   const onSubmit: SubmitHandler<LoginDetails> = async (formData) => {
 
-  console.log(formData);
-  console.log(errors);
-
-  const url = API_ROUTES.Login
-
   try {
+    const url = API_ROUTES.Login
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': xcsrf? xcsrf: '',
       },
+      credentials: 'include',
       body: JSON.stringify({
         username: formData.username,
         password: formData.password
@@ -53,7 +82,24 @@ function Login() {
         })
       }
 
-      throw new Error(`Response status: ${response.status}. ${json.detail}`);
+      throw new Error(`Response status: ${response.status}: ${json.detail}`);
+    }
+
+    else {
+      const sessionUrl = API_ROUTES.Session
+      const sessionCheck = await fetch(sessionUrl, {
+        credentials: 'include'
+      });
+      const sessionCheckResponse = await sessionCheck.json();
+    
+      if (sessionCheck.ok) {
+        console.log('session check:')
+        console.log(sessionCheckResponse)
+        navigate('/admin');
+      }
+      else {
+        console.error(`Status: ${sessionCheck.status}`, sessionCheckResponse.detail);
+      }
     }
   } catch (error){
     console.error(error);
