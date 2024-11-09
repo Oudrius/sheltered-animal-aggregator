@@ -29,11 +29,12 @@ class Species(models.Model):
     
     
 class Animal(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True)
     age = models.IntegerField(blank=True, null=True)
-    sex = models.CharField(max_length=6, choices=(
+    sex = models.CharField(max_length=7, choices=(
         ('male', 'Patinas'),
-        ('female', 'Patelė')
+        ('female', 'Patelė'),
+        ('unknown', 'Nežinoma')
     ))
     special_needs = models.CharField(blank=True, null=True, max_length=254)
     description = models.TextField(blank=True, null=True)

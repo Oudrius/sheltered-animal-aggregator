@@ -3,6 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from django.middleware.csrf import get_token
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -29,7 +30,6 @@ class Register(generics.CreateAPIView):
     
 
 class CsrfRetrieve(APIView):
-    authentication_classes = [SessionAuthentication]
     
     def get(self, request, format=None):
         response = Response({'detail': 'CSRF cookie set'}, status=status.HTTP_200_OK)
