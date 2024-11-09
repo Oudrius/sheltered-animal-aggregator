@@ -72,7 +72,7 @@ function Admin() {
       <>
       <h1>Logged in as: {user}</h1>
         <Logout xcsrf={xcsrf? xcsrf: ''}/>
-        <AddAnimalForm />
+        <AddAnimalForm xcsrf={xcsrf? xcsrf: ''}/>
       </>
       }
     </Box>

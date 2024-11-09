@@ -18,24 +18,16 @@ import {
   import { useEffect, useRef, useState } from 'react';
   import API_ROUTES from "../config/api";
 
-type Sex = "male" | "female"| "unknown";
+interface XcsrfProp {
+  xcsrf: string;
+}
 
 interface Species {
   id: number;
   name: string;
 }
 
-interface AnimalDetails {
-  name?: string;
-  age?: number;
-  sex?: Sex;
-  specialNeeds?: string;
-  description?: string;
-  pictureUrl?: File;
-  species: string;
-}
-
-function AddAnimalForm() {
+function AddAnimalForm({ xcsrf}: XcsrfProp) {
   const {
     register,
     handleSubmit,
@@ -44,32 +36,6 @@ function AddAnimalForm() {
     formState: { errors }
   } = useForm<AnimalDetails>();
 
-  useEffect(() => {
-
-    const setCookies = async () => {
-
-      const url = API_ROUTES.Csrf;
-    
-      const response = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-      });
-    
-      const json = await response.json();
-
-      const xcsrftoken = response.headers.get('X-CSRFToken');
-      if (xcsrftoken) {
-        setXcsrf(xcsrftoken);
-      }
-
-    }
-    setCookies();
-  }, [])
-  
-
-  const [xcsrf, setXcsrf] = useState<string>();
   const [species, setSpecies] = useState<Species[]>([]);
   const [img, setImg] = useState<string>('');
   const [imgFile, setImgFile] = useState<File | null>(null);
