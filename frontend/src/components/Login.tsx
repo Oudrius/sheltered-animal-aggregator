@@ -108,8 +108,18 @@ function Login() {
 
   return (
     <>
-      <Box position='relative' h='100%' display='flex' justifyContent='center' alignItems='center'>
-        <Center w='25%' padding={25} className="form_box">
+      <Box
+        w='1350px'
+        display='flex'
+        justifyContent='center'
+        bg='rgb(255, 255, 255, 0.3)'
+        py='60px'
+        px='40px'
+        border='1px solid  rgb(255, 255, 255, 0.5)'
+        borderRadius='40px'
+      >  
+      <Box display='flex' justifyContent='center' alignItems='center'>
+        <Center padding={25} className="form_box">
           <form onSubmit={handleSubmit(onSubmit)}>
             {errors.root?.message && 
               <p>{ errors.root.message }</p>
@@ -136,6 +146,7 @@ function Login() {
           </form>
         </Center>
       </Box>
+    </Box>
     </>
   );
 }

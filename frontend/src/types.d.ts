@@ -7,6 +7,7 @@ declare global {
     sex: "male" | "female"| "unknown";
     specialNeeds?: string;
     description?: string;
+    picture?: string;
     pictureUrl?: File;
     species: string;
   }

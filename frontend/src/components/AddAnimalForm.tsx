@@ -121,9 +121,9 @@ function AddAnimalForm({ xcsrf}: XcsrfProp) {
   return (
     <>
       <Box position='relative' h='100%' display='flex' justifyContent='center' alignItems='center'>
-        <Center w='25%' flexDirection='column' padding={25} className="form_box">
+        <Center width='600px' flexDirection='column' padding={25} className="form_box">
           <Text fontSize='3xl' mb={5}>Naujas gyvūnas</Text>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form className='add-animal' onSubmit={handleSubmit(onSubmit)}>
               {errors.root?.message && 
                 <p>{ errors.root.message }</p>
               }
@@ -155,7 +155,7 @@ function AddAnimalForm({ xcsrf}: XcsrfProp) {
                   </FormControl>
                   <FormControl isInvalid={!!errors.specialNeeds}>
                     <FormLabel>Specialūs poreikiai</FormLabel>
-                    <Textarea placeholder='Aprašykite specialius poreikius' className="form_box-input" {...register('specialNeeds', {
+                    <Textarea height='200px' resize='none' placeholder='Aprašykite specialius poreikius' className="form_box-input" {...register('specialNeeds', {
                       maxLength: {
                         value: 254,
                         message: 'Tekstas turi būti trumpesnis nei 254 simboliai.'
@@ -166,7 +166,7 @@ function AddAnimalForm({ xcsrf}: XcsrfProp) {
                   </FormControl>
                   <FormControl>
                     <FormLabel>Gyvūno aprašymas</FormLabel>
-                    <Textarea placeholder='Aprašykite gyvūną' className="form_box-input" {...register('description')}/>
+                    <Textarea height='400px' resize='none' placeholder='Aprašykite gyvūną' className="form_box-input" {...register('description')}/>
                   </FormControl>
                   <FormControl isRequired>
                     <FormLabel>Gyvūno rūšis</FormLabel>

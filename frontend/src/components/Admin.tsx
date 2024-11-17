@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AddAnimalForm from "./AddAnimalForm";
 import { Box, Center, Text } from "@chakra-ui/react";
 import Logout from "./Logout";
+import './styles/form.css'
 
 interface UserResponse {
   username: string;
@@ -68,13 +69,32 @@ function Admin() {
 
   return (
     <Box>
-      {user && showAddForm &&
-      <>
-      <h1>Logged in as: {user}</h1>
-        <Logout xcsrf={xcsrf? xcsrf: ''}/>
-        <AddAnimalForm xcsrf={xcsrf? xcsrf: ''}/>
-      </>
-      }
+      <Box
+        w='1350px'
+        display='flex'
+        flexDirection='column'
+        justifyContent='center'
+        bg='rgb(255, 255, 255, 0.3)'
+        py='60px'
+        px='40px'
+        border='1px solid  rgb(255, 255, 255, 0.5)'
+        borderRadius='40px'
+        mb='30px'
+      >  
+        {user && showAddForm &&
+        <>
+        <Text mb={3}>Prisijungęs kaip: {user}</Text>
+        <Box>
+          <Logout xcsrf={xcsrf? xcsrf: ''}/>
+        </Box>
+        <Center>
+          <Box position='relative' h='100%' display='flex' justifyContent='center' alignItems='center'>
+            <AddAnimalForm xcsrf={xcsrf? xcsrf: ''}/>
+          </Box>
+        </Center>
+        </>
+        }
+      </Box>
     </Box>
   )
 }
