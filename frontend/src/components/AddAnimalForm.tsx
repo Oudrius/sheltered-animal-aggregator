@@ -13,7 +13,6 @@ import {
     Textarea,
     Select,
     Image,
-    SelectField
   } from '@chakra-ui/react'
   import { useEffect, useRef, useState } from 'react';
   import API_ROUTES from "../config/api";

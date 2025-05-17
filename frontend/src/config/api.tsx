@@ -1,3 +1,5 @@
+import { StringLiteral } from "typescript";
+
 interface APIRoutes {
     Register: string,
     Login: string,
@@ -7,6 +9,8 @@ interface APIRoutes {
     Animals: string
     Species: string,
     Csrf: string;
+    Cities: string;
+    Shelters: string;
 }
 
 const ANIMALS_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
@@ -22,6 +26,8 @@ const API_ROUTES: APIRoutes = {
     User: `${ANIMALS_API_BASE_URL}${ANIMALS_API_AUTH_PATH}/user/`,
     Animals: `${ANIMALS_API_BASE_URL}${ANIMALS_API_PATH}/animals/`,
     Species: `${ANIMALS_API_BASE_URL}${ANIMALS_API_PATH}/species/`,
+    Cities: `${ANIMALS_API_BASE_URL}${ANIMALS_API_PATH}/cities/`,
+    Shelters: `${ANIMALS_API_BASE_URL}${ANIMALS_API_PATH}/shelters/`,
 }
 
 export default API_ROUTES;

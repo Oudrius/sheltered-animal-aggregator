@@ -1,6 +1,8 @@
 import { Flex, Select, Box, Heading } from "@chakra-ui/react"
+import { ChangeEvent } from "react";
 
-const Sorting = () => {
+const Sorting = ({ cities, shelters, species, onSelect }: SortingProps) => {
+
   return (
     <Box
       bg='rgb(255, 255, 255, 0.4)'
@@ -16,20 +18,27 @@ const Sorting = () => {
     >
       <Heading alignContent='center' fontSize={24}>Filtrai</Heading>
       <Flex gap={10} flex={1}>
-        <Select placeholder='Miestas' size='md' bg={"white"} flex={1}>
-          <option value='option1'>Option 1</option>
-          <option value='option2'>Option 2</option>
-          <option value='option3'>Option 3</option>
+        <Select placeholder='Miestas' size='md' bg={"white"} flex={1} onChange={(e: ChangeEvent<HTMLSelectElement>) => onSelect('city', e.target.value)}
+          defaultValue="">
+          {cities.map((city, index) => {
+            return (
+              <option key={index} value={city.name}>{city.name}</option>
+            );
+          })}
         </Select>
         <Select placeholder='Prieglauda' size='md' bg={"white"} flex={1}>
-          <option value='option1'>Option 1</option>
-          <option value='option2'>Option 2</option>
-          <option value='option3'>Option 3</option>
+          {shelters.map((shelter, index) => {
+            return (
+              <option key={index} value={shelter.name}>{shelter.name}</option>
+            )
+          })}
         </Select>
         <Select placeholder='Gyvūnas' size='md' bg={"white"} flex={1}>
-          <option value='option1'>Option 1</option>
-          <option value='option2'>Option 2</option>
-          <option value='option3'>Option 3</option>
+          {species.map((species, index) => {
+            return (
+              <option key={index} value={species.name}>{species.name}</option>
+            )
+          })}
         </Select>
       </Flex>
     </Box>

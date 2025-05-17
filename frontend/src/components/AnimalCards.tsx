@@ -1,42 +1,7 @@
 import { SimpleGrid, Card, CardBody, CardFooter, Heading, Text, Button, Image, Stack, Flex } from '@chakra-ui/react'
-import { useEffect, useState } from 'react';
-import API_ROUTES from '../config/api';
 import './styles/form.css'
 
-function AnimalCards() {
-
-  const [animalData, setAnimalData] = useState<AnimalDetails[]>([]);
-
-  useEffect(() => {
-    
-    const getAnimals = async () => {
-
-      try {
-        const url = API_ROUTES.Animals;
-  
-        const response = await fetch(url);
-        const json = await response.json();
-  
-        if (!response.ok) {
-          throw new Error(`${response.status}: ${response.statusText}`);
-        }
-  
-        else {
-          setAnimalData(json);
-        }
-      }
-  
-      catch (error) {
-        console.error(error);
-      }
-    }
-
-    getAnimals();
-  }, [])
-
-  useEffect(() => {
-    console.log(animalData);
-  }, [animalData])
+function AnimalCards({ animalData}: AnimalCardsProps) {
 
   return (
     <SimpleGrid spacing={5} columns={3} justifyItems='stretch' gridRowGap={5} paddingX='20px'>
