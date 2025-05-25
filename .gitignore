@@ -1,0 +1,9 @@
+.venv
+.env
+media
+backend/animals/migrations
+
+# infrastructure
+infrastructure/terraform/.terraform*
+infrastructure/terraform/terraform.tfstate*
+infrastructure/terraform/my-key-pair.pem

@@ -1,23 +1,23 @@
 resource "aws_vpc" "main" {
- cidr_block           = var.vpc_cidr
- enable_dns_hostnames = true
- tags = {
-   name = "main"
- }
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = true
+  tags = {
+    name = "main"
+  }
 }
 
 resource "aws_subnet" "subnet" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, 1)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 1)
   map_public_ip_on_launch = true
-  availability_zone = "eu-north-1a"
+  availability_zone       = "eu-north-1a"
 }
 
 resource "aws_subnet" "subnet2" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
   map_public_ip_on_launch = true
-  availability_zone = "eu-north-1b"
+  availability_zone       = "eu-north-1b"
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
@@ -30,7 +30,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.main.id
   route {
-    cidr_block           = "0.0.0.0/0"
+    cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
 }
@@ -46,22 +46,22 @@ resource "aws_route_table_association" "subnet2_route" {
 }
 
 resource "aws_security_group" "security_group" {
-  name = "ecs-security-group"
+  name   = "ecs-security-group"
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port = 0
-    to_port = 0
-    protocol = -1
-    self = "false"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    self        = "false"
     cidr_blocks = ["0.0.0.0/0"]
     description = "any"
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
