@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   network_mode       = "awsvpc"
   execution_role_arn = "arn:aws:iam::625540785845:role/ecsTaskExecutionRole"
   cpu       = 1024
-  memory    = 2048
+  memory    = 1024
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
@@ -42,10 +42,10 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 
   container_definitions = jsonencode([
     {
-      name      = "dockergs"
-      image     = "625540785845.dkr.ecr.eu-north-1.amazonaws.com/animals-frontend:latest"
-      cpu       = 1024
-      memory    = 2048
+      name      = "animals-frontend"
+      image     = "public.ecr.aws/a0a4h4k0/animals-frontend:latest"
+      cpu       = 512
+      memory    = 512
       essential = true
       portMappings = [
         {
@@ -85,7 +85,7 @@ resource "aws_ecs_service" "ecs_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
-    container_name   = "dockergs"
+    container_name   = "animals-frontend"
     container_port   = 80
   }
 
